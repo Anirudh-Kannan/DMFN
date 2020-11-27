@@ -1,1 +1,1 @@
-/content/drive/My Drive/VCL/Grad Cam Outputs/Multiple Layer Finetuned/Surgical Mask/043166_surgical.jpg
+/content/data_faces/img_align_celeba_masked/070210_cloth.jpg
