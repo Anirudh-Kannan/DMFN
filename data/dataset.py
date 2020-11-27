@@ -5,7 +5,7 @@ import random
 import torchvision.transforms as transforms
 import numpy as np
 import torch
-
+Rx = Ry = 1
 
 def default_loader(path):
     return Image.open(path).convert('RGB')
@@ -60,8 +60,32 @@ class ImageFilelist(data.Dataset):
         return len(self.imlist)
 
     def load_mask(self, index):
+
         if self.opt['mask_type'] == 'regular':
             bbox = util.bbox(self.opt)
+            file1 = open('/content/drive/My Drive/VCL/Bounding Boxes/finalboundingboxes1.txt', 'r') 
+            Lines = file1.readlines() 
+
+            file2 = open(self.opt['image_list'])
+            text = file2.readlines()
+            x = text[0].split('/')[-1].split('.')[0]
+    
+            for line in Lines:
+              a = line.split(',')
+              if a[0] == x:
+                x1 = int(float(a[1]))
+                y1 = int(float(a[2]))
+                x2 = int(float(a[3]))
+                y2 = int(float(a[4]))
+                break
+                
+              
+            Rx = 256/178
+            Ry = 256/218
+            
+            bbox = (int(Ry*y1), int(Rx*x1), int(Ry*(y2-y1)), int(Rx*(x2-x1)))#util.bbox(self.opt)
+            
+            print(bbox)
             mask = util.bbox2mask(bbox, self.opt)  # Tensor, [1, H, W]
             bbox_t = torch.from_numpy(np.array(bbox))
             return bbox_t, mask
@@ -82,7 +106,7 @@ class ImageFilelist(data.Dataset):
     def resize(self, img, height, width, centerCrop=False):  # mainly for celeba dataset | place365 | paris_streetview
         imgw, imgh = img.size[0], img.size[1]  # [w, h, c]
 
-        if imgh != imgw:
+        '''if imgh != imgw:
 
             if centerCrop:
                 # center crop, mainly for celeba
@@ -96,7 +120,9 @@ class ImageFilelist(data.Dataset):
                 ix = random.randrange(0, imgw - side + 1)
                 iy = random.randrange(0, imgh - side + 1)
                 img = img.crop((ix, iy, side, side))
-
+        '''
+        Rx = imgw/width
+        Ry = imgh/height
         img = img.resize((width, height), Image.BICUBIC)
 
         return img
