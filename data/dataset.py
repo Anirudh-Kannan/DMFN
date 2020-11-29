@@ -43,7 +43,7 @@ class ImageFilelist(data.Dataset):
         img = self.resize(img, self.opt['img_shape'][2], self.opt['img_shape'][1])
         img_tensor = self.transform(img)  # Tensor [C, H, W], [-1, 1]
         if self.opt['mask_type'] == 'regular':
-            bbox_tensor, mask_tensor = self.load_mask(index)  # Tensor [1, H, W]
+            bbox_tensor, mask_tensor = self.load_mask(index, impath)  # Tensor [1, H, W]
         else:
             mask_tensor = self.load_mask(index)
             bbox = util.bbox(self.opt)
@@ -59,26 +59,30 @@ class ImageFilelist(data.Dataset):
     def __len__(self):
         return len(self.imlist)
 
-    def load_mask(self, index):
+    def load_mask(self, index, impath):
 
         if self.opt['mask_type'] == 'regular':
             bbox = util.bbox(self.opt)
-            file1 = open('/content/drive/My Drive/VCL/Bounding Boxes/finalboundingboxes1.txt', 'r') 
-            Lines = file1.readlines() 
+            x = impath.split('/')[-1].split('.')[0]
 
-            file2 = open(self.opt['image_list'])
-            text = file2.readlines()
-            x = text[0].split('/')[-1].split('.')[0]
-    
-            for line in Lines:
-              a = line.split(',')
-              if a[0] == x:
-                x1 = int(float(a[1]))
-                y1 = int(float(a[2]))
-                x2 = int(float(a[3]))
-                y2 = int(float(a[4]))
-                break
+            flag = 0
+
+            for i in range(1,6):
+                file1 = open('/content/drive/My Drive/VCL/Bounding Boxes/finalboundingboxes'+ i +'.txt', 'r') 
+                Lines = file1.readlines()
+
+                for line in Lines:
+                    a = line.split(',')
+                    if a[0] == x:
+                        x1 = int(float(a[1]))
+                        y1 = int(float(a[2]))
+                        x2 = int(float(a[3]))
+                        y2 = int(float(a[4]))
+                        flag = 1
+                        break
                 
+                if flag == 1:
+                    break
               
             Rx = 256/178
             Ry = 256/218
