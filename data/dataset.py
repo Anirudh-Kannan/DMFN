@@ -68,7 +68,7 @@ class ImageFilelist(data.Dataset):
             flag = 0
 
             for i in range(1,6):
-                file1 = open('/content/drive/My Drive/VCL/Bounding Boxes/finalboundingboxes'+ i +'.txt', 'r') 
+                file1 = open('/content/drive/My Drive/VCL/Bounding Boxes/finalboundingboxes'+ str(i) +'.txt', 'r') 
                 Lines = file1.readlines()
 
                 for line in Lines:

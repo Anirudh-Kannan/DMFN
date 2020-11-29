@@ -1,1 +1,3 @@
 /content/data_faces/img_align_celeba_masked/070210_cloth.jpg
+/content/data_faces/img_align_celeba_masked/166243_cloth.jpg
+/content/data_faces/img_align_celeba_masked/118394_cloth.jpg
